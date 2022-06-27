@@ -1,0 +1,6 @@
+Common/RmDLL.lo: Common/RmDLL.cpp /usr/include/stdc-predef.h \
+ ../../Include/Private/rm.h
+
+/usr/include/stdc-predef.h:
+
+../../Include/Private/rm.h:
