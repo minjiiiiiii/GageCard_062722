@@ -27,28 +27,6 @@ uname -v = #198-Ubuntu SMP Tue Jun 14 03:23:51 UTC 2022
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/minji/cmake-3.23.1/bin
-PATH: /home/minji/0_petalinux_installation/tools/xsct/petalinux/bin
-PATH: /home/minji/0_petalinux_installation/tools/common/petalinux/bin
-PATH: /home/minji/0_petalinux_installation/tools/xsct/gnu/microblaze/lin/bin
-PATH: /home/minji/0_petalinux_installation/tools/xsct/gnu/armr5/lin/gcc-arm-none-eabi/bin
-PATH: /home/minji/0_petalinux_installation/tools/xsct/gnu/aarch64/lin/aarch64-none/bin
-PATH: /home/minji/0_petalinux_installation/tools/xsct/gnu/aarch32/lin/gcc-arm-none-eabi/bin
-PATH: /home/minji/Vitis_HLS/2020.2/bin
-PATH: /home/minji/Model_Composer/2020.2/bin
-PATH: /home/minji/Vitis/2020.2/bin
-PATH: /home/minji/Vitis/2020.2/gnu/microblaze/lin/bin
-PATH: /home/minji/Vitis/2020.2/gnu/arm/lin/bin
-PATH: /home/minji/Vitis/2020.2/gnu/microblaze/linux_toolchain/lin64_le/bin
-PATH: /home/minji/Vitis/2020.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin
-PATH: /home/minji/Vitis/2020.2/gnu/aarch32/lin/gcc-arm-none-eabi/bin
-PATH: /home/minji/Vitis/2020.2/gnu/aarch64/lin/aarch64-linux/bin
-PATH: /home/minji/Vitis/2020.2/gnu/aarch64/lin/aarch64-none/bin
-PATH: /home/minji/Vitis/2020.2/gnu/armr5/lin/gcc-arm-none-eabi/bin
-PATH: /home/minji/Vitis/2020.2/tps/lnx64/cmake-3.3.2/bin
-PATH: /home/minji/Vitis/2020.2/aietools/bin
-PATH: /home/minji/Vivado/2020.2/bin
-PATH: /home/minji/DocNav
 PATH: /home/minji/.local/bin
 PATH: /home/minji/bin
 PATH: /usr/local/sbin
@@ -376,7 +354,7 @@ configure:11518: checking how to hardcode library paths into programs
 configure:11543: result: immediate
 configure:11645: checking for shl_load
 configure:11645: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccHKCPLu.o: In function `main':
+/tmp/cccuKgbg.o: In function `main':
 /home/minji/gati-linux-driver/conftest.c:57: undefined reference to `shl_load'
 collect2: error: ld returned 1 exit status
 configure:11645: $? = 1
@@ -488,7 +466,7 @@ configure: failed program was:
 configure:11683: result: no
 configure:11688: checking for dlopen
 configure:11688: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/ccg13drp.o: In function `main':
+/tmp/cchmx4Zk.o: In function `main':
 /home/minji/gati-linux-driver/conftest.c:57: undefined reference to `dlopen'
 collect2: error: ld returned 1 exit status
 configure:11688: $? = 1
@@ -564,7 +542,7 @@ configure:11928: $? = 0
 configure:11946: result: yes
 configure:11951: checking whether a statically linked program can dlopen itself
 configure:12031: gcc -o conftest -g -O2  -DHAVE_DLFCN_H  -Wl,--export-dynamic -static conftest.c -ldl  >&5
-/tmp/ccG5WfSw.o: In function `main':
+/tmp/cceDekXu.o: In function `main':
 /home/minji/gati-linux-driver/configure:12010: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
 configure:12034: $? = 0
 conftest: undefined symbol: _fnord

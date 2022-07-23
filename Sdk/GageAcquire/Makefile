@@ -18,8 +18,11 @@ LDFLAGS = -lCsSsm -lCsAppSupport
 GageAcquire: Acquire.o CsSdkMisc.o
 	$(CC) Acquire.o CsSdkMisc.o $(LDFLAGS) -o GageAcquire
 
+#Acquire.o: Acquire_mj.c
+#	$(CC) $(INCLUDE) $(CFLAGS) -c Acquire_mj.c
+
 Acquire.o: Acquire.c
-	$(CC) $(INCLUDE) $(CFLAGS) -c Acquire.c
+	$(CC) $(INCLUDE) $(CFLAGS) -c Acquire.c	
 
 CsSdkMisc.o: ../C_Common/CsSdkMisc.c
 	$(CC) $(INCLUDE) $(CFLAGS) -c ../C_Common/CsSdkMisc.c
@@ -34,3 +37,13 @@ install: all
 
 uninstall: clean
 #	rm -rf ../../Bin/GageAcquire
+
+
+##############################original makefile for full scenario#####################
+#CC = gcc
+#CFLAGS = -Wall -O2 -m32
+
+#OBJS = main.o daq.o tx.o motor.o
+
+#main: $(OBJS)
+#	$(CC) $(CFLAGS) -o main $(OBJS) -lpthread -lrt -lm

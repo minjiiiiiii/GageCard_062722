@@ -5,9 +5,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
-
-# Make data base, printed on Thu Jun 23 11:32:05 2022
  
+
+# Make data base, printed on Mon Jul 11 13:24:18 2022
 
 # Variables
 
@@ -23,10 +23,14 @@ ETAGS = etags
 CSCOPE = cscope
 # environment
 DESKTOP_SESSION = ubuntu
+# environment
+XAUTHORITY = /run/user/1000/gdm/Xauthority
 # default
 .SHELLFLAGS := -c
 # makefile (from 'Makefile', line 162)
 am__recursive_targets = $(RECURSIVE_TARGETS) $(RECURSIVE_CLEAN_TARGETS) $(am__extra_recursive_targets)
+# environment
+LANG\tDEFAULT = en_US.UTF-8
 # makefile (from 'Makefile', line 88)
 POST_UNINSTALL = :
 # environment
@@ -41,12 +45,14 @@ CPPFLAGS =
 DIST_TARGETS = dist-gzip
 # makefile (from 'Makefile', line 265)
 INSTALL = /usr/bin/install -c
+# environment
+SESSION_MANAGER = local/minji-P10S-V-Series:@/tmp/.ICE-unix/2133,unix/minji-P10S-V-Series:/tmp/.ICE-unix/2133
 # makefile (from 'Makefile', line 253)
 DEFS = -DHAVE_CONFIG_H
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
-XAUTHORITY = /run/user/1000/gdm/Xauthority
+PAPERSIZE\tDEFAULT = a4
 # environment
 GDMSESSION = ubuntu
 # environment
@@ -57,10 +63,6 @@ CURDIR := /home/minji/gati-linux-driver
 SHELL = /bin/sh
 # makefile (from 'Makefile', line 282)
 NM = /usr/bin/nm -B
-# makefile (from 'Makefile', line 329)
-host_alias = 
-# environment
-VTE_VERSION = 5202
 # environment
 VSCODE_NLS_CONFIG = {"locale":"ko","availableLanguages":{"*":"ko"},"_languagePackId":"738ac08552cca045871a73764b8c446f.ko","_translationsConfigFile":"/home/minji/.config/Code/clp/738ac08552cca045871a73764b8c446f.ko/tcf.json","_cacheRoot":"/home/minji/.config/Code/clp/738ac08552cca045871a73764b8c446f.ko","_resolvedLanguagePackCoreLocation":"/home/minji/.config/Code/clp/738ac08552cca045871a73764b8c446f.ko/da15b6fd3ef856477bf6f4fb29ba1b7af717770d","_corruptedFile":"/home/minji/.config/Code/clp/738ac08552cca045871a73764b8c446f.ko/corrupted.info","_languagePackSupport":true}
 # makefile (from 'Makefile', line 324)
@@ -85,8 +87,6 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 pdfdir = ${docdir}
 # makefile (from 'Makefile', line 330)
 host_cpu = x86_64
-# environment
-LESSOPEN = | /usr/bin/lesspipe %s
 # makefile (from 'Makefile', line 309)
 ac_ct_DUMPBIN = 
 # makefile (from 'Makefile', line 134)
@@ -107,8 +107,6 @@ am__relativize = dir0=`pwd`; sed_first='s,^\([^/]*\)/.*$$,\1,'; sed_rest='s,^[^/
 build_vendor = pc
 # makefile (from 'Makefile', line 122)
 am__base_list = sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-# makefile (from 'Makefile', line 345)
-prefix = /usr/local
 # environment
 IM_CONFIG_PHASE = 2
 # makefile (from 'Makefile', line 275)
@@ -152,20 +150,18 @@ psdir = ${docdir}
 AWK = gawk
 # makefile (from 'Makefile', line 314)
 am__tar = $${TAR-tar} chof - "$$tardir"
-# makefile (from 'Makefile', line 320)
-build_os = linux-gnu
 # environment
 CLUTTER_IM_MODULE = xim
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-b4fb29a6-3e94-4b21-a093-94ba03b9eef1.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-79f9f27c-1dee-4e5a-b27b-8edad9dfecad.sock
 # makefile (from 'Makefile', line 29)
 am__make_running_with_option = case $${target_option-} in ?) ;; *) echo "am__make_running_with_option: internal error: invalid" "target option '$${target_option-}' specified" >&2; exit 1;; esac; has_opt=no; sane_makeflags=$$MAKEFLAGS; if $(am__is_gnu_make); then sane_makeflags=$$MFLAGS; else case $$MAKEFLAGS in *\\[\ \	]*) bs=\\; sane_makeflags=`printf '%s\n' "$$MAKEFLAGS" | sed "s/$$bs$$bs[$$bs $$bs	]*//g"`;; esac; fi; skip_next=no; strip_trailopt () { flg=`printf '%s\n' "$$flg" | sed "s/$$1.*$$//"`; }; for flg in $$sane_makeflags; do test $$skip_next = yes && { skip_next=no; continue; }; case $$flg in *=*|--*) continue;; -*I) strip_trailopt 'I'; skip_next=yes;; -*I?*) strip_trailopt 'I';; -*O) strip_trailopt 'O'; skip_next=yes;; -*O?*) strip_trailopt 'O';; -*l) strip_trailopt 'l'; skip_next=yes;; -*l?*) strip_trailopt 'l';; -[dEDm]) skip_next=yes;; -[JT]) skip_next=yes;; esac; case $$flg in *$$target_option*) has_opt=yes; break;; esac; done; test $$has_opt = yes
 # environment
-VSCODE_CWD = /home/minji/gati-linux-driver
+VSCODE_CWD = /home/minji
 # makefile (from 'Makefile', line 228)
 DIST_ARCHIVES = $(distdir).tar.gz
-# environment
-XILINX_VITIS = /home/minji/Vitis/2020.2
+# makefile (from 'Makefile', line 320)
+build_os = linux-gnu
 # makefile (from 'Makefile', line 298)
 SET_MAKE = 
 # makefile (from 'Makefile', line 78)
@@ -173,7 +169,7 @@ install_sh_DATA = $(install_sh) -c -m 644
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/minji/cmake-3.23.1/bin:/home/minji/0_petalinux_installation/tools/xsct/petalinux/bin:/home/minji/0_petalinux_installation/tools/common/petalinux/bin:/home/minji/0_petalinux_installation/tools/xsct/gnu/microblaze/lin/bin:/home/minji/0_petalinux_installation/tools/xsct/gnu/armr5/lin/gcc-arm-none-eabi/bin:/home/minji/0_petalinux_installation/tools/xsct/gnu/aarch64/lin/aarch64-none/bin:/home/minji/0_petalinux_installation/tools/xsct/gnu/aarch32/lin/gcc-arm-none-eabi/bin:/home/minji/Vitis_HLS/2020.2/bin:/home/minji/Model_Composer/2020.2/bin:/home/minji/Vitis/2020.2/bin:/home/minji/Vitis/2020.2/gnu/microblaze/lin/bin:/home/minji/Vitis/2020.2/gnu/arm/lin/bin:/home/minji/Vitis/2020.2/gnu/microblaze/linux_toolchain/lin64_le/bin:/home/minji/Vitis/2020.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin:/home/minji/Vitis/2020.2/gnu/aarch32/lin/gcc-arm-none-eabi/bin:/home/minji/Vitis/2020.2/gnu/aarch64/lin/aarch64-linux/bin:/home/minji/Vitis/2020.2/gnu/aarch64/lin/aarch64-none/bin:/home/minji/Vitis/2020.2/gnu/armr5/lin/gcc-arm-none-eabi/bin:/home/minji/Vitis/2020.2/tps/lnx64/cmake-3.3.2/bin:/home/minji/Vitis/2020.2/aietools/bin:/home/minji/Vivado/2020.2/bin:/home/minji/DocNav:/home/minji/.local/bin:/home/minji/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PATH = /home/minji/.local/bin:/home/minji/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # makefile (from 'Makefile', line 104)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 # makefile (from 'Makefile', line 272)
@@ -184,8 +180,6 @@ LD = /usr/bin/ld -m elf_x86_64
 am__define_uniq_tagged_files = list='$(am__tagged_files)'; unique=`for i in $$list; do if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; done | $(am__uniquify_input)`
 # makefile (from 'Makefile', line 356)
 top_srcdir = .
-# environment
-XILINX_VIVADO = /home/minji/Vivado/2020.2
 # makefile (from 'Makefile', line 255)
 DLLTOOL = false
 # makefile (from 'Makefile', line 82)
@@ -197,14 +191,14 @@ am__v_GEN_1 =
 # makefile (from 'Makefile', line 294)
 PACKAGE_VERSION = 5.04.36
 # makefile (from 'Makefile', line 348)
+ 
 runstatedir = ${localstatedir}/run
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # makefile (from 'Makefile', line 267)
 INSTALL_PROGRAM = ${INSTALL}
- 
 # environment
-SESSION_MANAGER = local/minji-P10S-V-Series:@/tmp/.ICE-unix/1958,unix/minji-P10S-V-Series:/tmp/.ICE-unix/1958
+LC_NAME\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 339)
 localedir = ${datarootdir}/locale
 # environment
@@ -249,13 +243,13 @@ XDG_MENU_PREFIX = gnome-
 VSCODE_LOG_STACK = false
 # makefile (from 'Makefile', line 291)
 PACKAGE_STRING = Gage Driver 5.04.36
- 
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # makefile (from 'Makefile', line 271)
 LDFLAGS = 
-# makefile (from 'Makefile', line 317)
-build = x86_64-pc-linux-gnu
+ 
+# makefile (from 'Makefile', line 279)
+MAKEINFO = ${SHELL} /home/minji/gati-linux-driver/missing makeinfo
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # makefile (from 'Makefile', line 89)
@@ -263,11 +257,11 @@ build_triplet = x86_64-pc-linux-gnu
 # makefile (from 'Makefile', line 259)
 ECHO_N = -n
 # environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
-# environment
 XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 9749
 # makefile (from 'Makefile', line 103)
 CONFIG_CLEAN_VPATH_FILES = 
 # automatic
@@ -280,16 +274,17 @@ am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) | sed 's|^\./
 DISPLAY = :0
 # makefile (from 'Makefile', line 274)
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
+ 
 # makefile (from 'Makefile', line 343)
 oldincludedir = /usr/include
 # makefile (from 'Makefile', line 327)
 exec_prefix = ${prefix}
-# makefile (from 'Makefile', line 93)
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+# environment
+LC_NUMERIC\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 91)
 subdir = .
-# environment
-PETALINUX_VER = 2020.2
+# makefile (from 'Makefile', line 315)
+am__untar = $${TAR-tar} xf -
 # makefile (from 'Makefile', line 351)
 srcdir = .
 # makefile (from 'Makefile', line 335)
@@ -304,8 +299,8 @@ VSCODE_PIPE_LOGGING = true
 LT_SYS_LIBRARY_PATH = 
 # environment
 PWD = /home/minji/gati-linux-driver
- 
 # makefile (from 'Makefile', line 80)
+ 
 install_sh_SCRIPT = $(install_sh) -c
 # makefile (from 'Makefile', line 277)
 LTLIBOBJS = 
@@ -314,7 +309,7 @@ abs_top_builddir = /home/minji/gati-linux-driver
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 2045
+SSH_AGENT_PID = 2215
 # makefile (from 'Makefile', line 296)
 RANLIB = ranlib
 # makefile (from 'Makefile', line 341)
@@ -335,14 +330,13 @@ HOME = /home/minji
 AM_RECURSIVE_TARGETS = $(am__recursive_targets:-recursive=) TAGS CTAGS cscope distdir dist dist-all distcheck
 # makefile (from 'Makefile', line 336)
 install_sh = ${SHELL} /home/minji/gati-linux-driver/install-sh
+ 
 # makefile (from 'Makefile', line 297)
 SED = /bin/sed
 # makefile (from 'Makefile', line 100)
 mkinstalldirs = $(install_sh) -d
-# environment
-LESSCLOSE = /usr/bin/lesspipe %s %s
-# environment
-VSCODE_CLI = 1
+# makefile (from 'Makefile', line 312)
+am__leading_dot = .
 # environment
 VSCODE_CODE_CACHE_PATH = /home/minji/.config/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
 # makefile (from 'Makefile', line 313)
@@ -359,18 +353,14 @@ APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
 # makefile (from 'Makefile', line 92)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
- 
 # makefile (from 'Makefile', line 318)
 build_alias = 
-# environment
-PETALINUX = /home/minji/0_petalinux_installation
 # makefile (from 'Makefile', line 350)
 sharedstatedir = ${prefix}/com
 # makefile (from 'Makefile', line 84)
 PRE_INSTALL = :
-# environment
-ELECTRON_NO_ATTACH_CONSOLE = 1
 # makefile (from 'Makefile', line 257)
+ 
 DUMPBIN = 
 # makefile (from 'Makefile', line 308)
 ac_ct_CXX = g++
@@ -394,6 +384,7 @@ top_distdir = $(distdir)
 EXTRA_DIST = Include Boards/KernelSpace Package/rpm/gage-driver.spec Package/dkms.conf Package/build_modules.sh Package/clean_modules.sh Package/driver.sh Package/gage.conf Package/gage.sh Package/gagehp.sh Package/gage-driver.conf Package/register_dkms.sh Package/README.user.txt README.txt Boards/Csi/CsSplenda/cse16xyo.csi Boards/Csi/CsSplenda/cse16xyy.csi CsTestQt Sdk/Makefile Sdk/SDK_README.TXT Sdk/C_Common/CsSdkMisc.c Sdk/C_Common/CsSdkMisc.h Sdk/C_Common/CsSdkUtil.c Sdk/C_Common/CsSdkUtil.h Sdk/C_Common/CsTchar.h Sdk/GageAcquire/Acquire.c Sdk/GageAcquire/Acquire.ini Sdk/GageAcquire/Makefile Sdk/GageCoerce/Coerce.c Sdk/GageCoerce/Coerce.h Sdk/GageCoerce/Coerce.ini Sdk/GageCoerce/Makefile Sdk/GageComplexTrigger/ComplexTrigger.c Sdk/GageComplexTrigger/ComplexTrigger.ini Sdk/GageComplexTrigger/Makefile Sdk/GageDeepAcquisition/DeepAcquisition.c Sdk/GageDeepAcquisition/DeepAcquisition.ini Sdk/GageDeepAcquisition/Makefile Sdk/GageMultipleRecord/Makefile Sdk/GageMultipleRecord/MultipleRecord.c Sdk/GageMultipleRecord/MultipleRecord.ini Sdk/GageMultipleSystem/Makefile Sdk/GageMultipleSystem/MultipleSystem.c Sdk/GageMultipleSystem/MultipleSystem.h Sdk/GageMultipleSystem/System1.ini Sdk/GageMultipleSystem/System2.ini Sdk/Advanced/GageEvents/Events.c Sdk/Advanced/GageEvents/Events.h Sdk/Advanced/GageEvents/Events.ini Sdk/Advanced/GageEvents/Makefile Sdk/Advanced/GageEvents/Threads.c Sdk/Advanced/GageStream2Analysis/Makefile Sdk/Advanced/GageStream2Analysis/Stream2Analysis.c Sdk/Advanced/GageStream2Analysis/Stream2Analysis.h Sdk/Advanced/GageStream2Analysis/Stream2Analysis.ini Sdk/Advanced/GageStream2Disk/Makefile Sdk/Advanced/GageStream2Disk/Stream2Disk.c Sdk/Advanced/GageStream2Disk/Stream2Disk.h Sdk/Advanced/GageStream2Disk/Stream2Disk.ini Sdk/Advanced/GageCsPrf/Makefile Sdk/Advanced/GageCsPrf/GageCsPrf.c Sdk/Advanced/GageCsPrf/GageCsPrf.h Sdk/Advanced/GageCsPrf/Prf.ini
 # makefile (from 'Makefile', line 340)
 localstatedir = ${prefix}/var
+ 
 # makefile (from 'Makefile', line 295)
 PATH_SEPARATOR = :
 # makefile (from 'Makefile', line 333)
@@ -404,8 +395,6 @@ MAKELEVEL := 0
 host_vendor = pc
 # makefile (from 'Makefile', line 85)
 POST_INSTALL = :
-# environment
-COLORTERM = truecolor
 # makefile (from 'Makefile', line 71)
 am__make_dryrun = (target_option=n; $(am__make_running_with_option))
 # default
@@ -421,17 +410,20 @@ NORMAL_UNINSTALL = :
 # makefile (from 'Makefile', line 189)
 DIST_SUBDIRS = $(SUBDIRS)
 # environment
-SHLVL = 3
+SHLVL = 1
 # makefile (from 'Makefile', line 243)
 CC = gcc
 # makefile (from 'Makefile', line 105)
 am__vpath_adj = case $$p in $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; *) f=$$p;; esac;
 # environment
+ 
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
 XDG_SESSION_ID = 3
 # environment
 USER = minji
+# environment
+LC_TIME\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 261)
 EGREP = /bin/grep -E
 # makefile (from 'Makefile', line 234)
@@ -442,7 +434,6 @@ distcleancheck_listfiles = find . -type f -print
 XDG_CURRENT_DESKTOP = Unity
 # makefile (from 'Makefile', line 316)
 bindir = ${exec_prefix}/bin
- 
 # makefile (from 'Makefile', line 133)
 AM_V_P = $(am__v_P_$(V))
 # makefile (from 'Makefile', line 101)
@@ -453,10 +444,11 @@ MKDIR_P = /bin/mkdir -p
 ac_ct_CC = gcc
 # makefile (from 'Makefile', line 331)
 host_os = linux-gnu
+ 
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
-# makefile (from 'Makefile', line 315)
-am__untar = $${TAR-tar} xf -
+# environment
+LC_MONETARY\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 249)
 CXXCPP = g++ -E
 # makefile (from 'Makefile', line 246)
@@ -465,8 +457,8 @@ CPP = gcc -E
 MAKE_COMMAND := make
 # makefile (from 'Makefile', line 94)
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) $(ACLOCAL_M4)
-# environment
-OLDPWD = /home/minji/gati-linux-driver/Sdk/GageAcquire
+# makefile (from 'Makefile', line 345)
+prefix = /usr/local
 # makefile (from 'Makefile', line 292)
 PACKAGE_TARNAME = gage-driver
 # makefile (from 'Makefile', line 96)
@@ -476,6 +468,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure $(am__configure_deps
 # makefile (from 'Makefile', line 349)
 sbindir = ${exec_prefix}/sbin
 # automatic
+ 
 *F = $(notdir $*)
 # makefile (from 'Makefile', line 81)
 INSTALL_HEADER = $(INSTALL_DATA)
@@ -489,9 +482,10 @@ build_cpu = x86_64
 pkglibexecdir = $(libexecdir)/gage-driver
 # makefile (from 'Makefile', line 115)
 am__nobase_list = $(am__nobase_strip_setup); for p in $$list; do echo "$$p $$p"; done | sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; if (++n[$$2] == $(am__install_max)) { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } END { for (dir in files) print dir, files[dir] }'
+# environment
+LC_TELEPHONE\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 373)
 bin_SCRIPTS = Package/gagehp.sh
- 
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -504,6 +498,7 @@ am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 FGREP = /bin/grep -F
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
+ 
 # makefile (from 'Makefile', line 284)
 OBJDUMP = objdump
 # makefile (from 'Makefile', line 250)
@@ -512,8 +507,8 @@ CXXDEPMODE = depmode=gcc3
 GDK_BACKEND = x11
 # makefile (from 'Makefile', line 202)
 am__post_remove_distdir = $(am__remove_distdir)
-# makefile (from 'Makefile', line 141)
-AM_V_at = $(am__v_at_$(V))
+# environment
+LANGUAGE\tDEFAULT = en_US:en
 # automatic
 +F = $(notdir $+)
 # makefile (from 'Makefile', line 310)
@@ -532,6 +527,8 @@ host = x86_64-pc-linux-gnu
 am__v_at_0 = @
 # makefile (from 'Makefile', line 290)
 PACKAGE_NAME = Gage Driver
+# makefile (from 'Makefile', line 317)
+build = x86_64-pc-linux-gnu
 # environment
  
 DEFAULTS_PATH = /usr/share/gconf/ubuntu.default.path
@@ -541,14 +538,14 @@ am__include = include
 PACKAGE_BUGREPORT = linux@gage-applied.com
 # environment
 TEXTDOMAINDIR = /usr/share/locale/
+# environment
+LC_PAPER\tDEFAULT = ko_KR.UTF-8
 # default
 MAKEFILES := 
 # makefile (from 'Makefile', line 131)
 am__installdirs = "$(DESTDIR)$(bindir)"
 # makefile (from 'Makefile', line 254)
 DEPDIR = .deps
-# makefile (from 'Makefile', line 312)
-am__leading_dot = .
 # makefile (from 'Makefile', line 355)
 top_builddir = .
 # makefile (from 'Makefile', line 173)
@@ -561,6 +558,7 @@ LN_S = ln -s
 CYGPATH_W = echo
 # makefile (from 'Makefile', line 111)
 am__nobase_strip_setup = srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+ 
 # makefile (from 'Makefile', line 248)
 CXX = g++
 # makefile (from 'Makefile', line 237)
@@ -581,9 +579,11 @@ LC_ALL = C
 ECHO_T = 
 # makefile (from 'Makefile', line 160)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive distclean-recursive maintainer-clean-recursive
- 
 # makefile (from 'Makefile', line 262)
 EXEEXT = 
+# makefile (from 'Makefile', line 93)
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+ 
 # makefile (from 'Makefile', line 144)
 am__v_at_1 = 
 # makefile (from 'Makefile', line 287)
@@ -591,31 +591,28 @@ OTOOL64 =
 # environment
 QT4_IM_MODULE = xim
 # environment
-GJS_DEBUG_TOPICS = JS ERROR;JS LOG
+LC_MEASUREMENT\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 273)
 LIBS = 
-# environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/1e4ff0c3_1ffb_4945_a250_52e2d33d2cc8
 # automatic
 ^F = $(notdir $^)
 # makefile (from 'Makefile', line 303)
 abs_srcdir = /home/minji/gati-linux-driver
-# environment
-GNOME_TERMINAL_SERVICE = :1.77
 # default
 SUFFIXES := 
+# makefile (from 'Makefile', line 141)
+AM_V_at = $(am__v_at_$(V))
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # makefile (from 'Makefile', line 280)
 MANIFEST_TOOL = :
 # makefile (from 'Makefile', line 239)
 AUTOCONF = ${SHELL} /home/minji/gati-linux-driver/missing autoconf
+ 
 # environment
 WINDOWPATH = 2
-# environment
-XILINX_HLS = /home/minji/Vitis_HLS/2020.2
-# environment
-XSCT_TOOLCHAIN = /home/minji/0_petalinux_installation/tools/xsct
+# makefile (from 'Makefile', line 329)
+host_alias = 
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # makefile (from 'Makefile', line 266)
@@ -626,9 +623,8 @@ GJS_DEBUG_OUTPUT = stderr
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 # default
 .RECIPEPREFIX := 
-# makefile (from 'Makefile', line 279)
- 
-MAKEINFO = ${SHELL} /home/minji/gati-linux-driver/missing makeinfo
+# environment
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # makefile (from 'Makefile', line 194)
 distdir = $(PACKAGE)-$(VERSION)
 # makefile (from 'Makefile', line 73)
@@ -636,21 +632,24 @@ pkgdatadir = $(datadir)/gage-driver
 # makefile (from 'Makefile', line 110)
 am__install_max = 40
 # makefile (from 'Makefile', line 359)
+ 
 SUBDIRS = Middle/CsDisp Middle/CsFs Middle/CsRmDLL Middle/CsRm Middle/CsSsm Sdk/CsAppSupport Boards/UserSpace/CsRabbit Boards/UserSpace/CsSpider Boards/UserSpace/CsSplenda Boards/UserSpace/CsJohnDeere Boards/UserSpace/CsDecade12 Boards/UserSpace/CsHexagon
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # makefile (from 'Makefile', line 288)
 PACKAGE = gage-driver
 # environment
 LANG = C
 # makefile (from 'Makefile', line 132)
 SCRIPTS = $(bin_SCRIPTS)
-# environment
-TERM = xterm-256color
 # makefile (from 'Makefile', line 187)
 CTAGS = ctags
 # makefile (from 'Makefile', line 323)
 datadir = ${datarootdir}
 # environment
-VSCODE_PID = 3952
+VSCODE_PID = 9749
+# environment
+LC_IDENTIFICATION\tDEFAULT = ko_KR.UTF-8
 # makefile (from 'Makefile', line 240)
 AUTOHEADER = ${SHELL} /home/minji/gati-linux-driver/missing autoheader
 # makefile (from 'Makefile', line 264)
@@ -659,21 +658,24 @@ GREP = /bin/grep
 PRE_UNINSTALL = :
 # makefile (from 'Makefile', line 196)
 am__remove_distdir = if test -d "$(distdir)"; then find "$(distdir)" -type d ! -perm -200 -exec chmod u+w {} ';' && rm -rf "$(distdir)" || { sleep 5 && rm -rf "$(distdir)"; }; else :; fi
+# environment
+LC_ADDRESS\tDEFAULT = ko_KR.UTF-8
+ 
 # makefile (from 'Makefile', line 229)
 GZIP_ENV = --best
 # variable set hash-table stats:
-# Load=320/1024=31%, Rehash=0, Collisions=113/440=26%
+# Load=317/1024=31%, Rehash=0, Collisions=119/437=27%
 
- 
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
 
-# . (device 2083, inode 11156942): 41 files, no impossibilities.
+# . (device 2051, inode 11156942): 42 files, no impossibilities.
 
-# 41 files, no impossibilities in 1 directories.
+ 
+# 42 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -698,13 +700,13 @@ cscopelist: cscopelist-recursive
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 dist-tarZ: distdir
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 725):
- 
 	@echo WARNING: "Support for distribution archives compressed with" \
 		       "legacy program 'compress' is deprecated." >&2
 	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
@@ -725,6 +727,7 @@ pdf-am:
 
 maintainer-clean: maintainer-clean-recursive
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -748,13 +751,13 @@ install-dvi-am:
 GTAGS:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
- 
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 615):
 	here=`$(am__cd) $(top_builddir) && pwd` \
 	  && $(am__cd) $(top_srcdir) \
 	  && gtags -i $(GTAGS_ARGS) "$$here"
+ 
 
 # Not a target:
 Sdk/Advanced/GageStream2Analysis/Stream2Analysis.ini:
@@ -806,6 +809,7 @@ dvi-recursive:
 	fi; test -z "$$fail"
 
 info-am:
+ 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -817,7 +821,6 @@ install-info-recursive:
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
- 
 	@fail=; \
 	if $(am__make_keepgoing); then \
 	  failcom='fail=yes'; \
@@ -880,6 +883,7 @@ cscopelist-am: config.h.in
 
 # Not a target:
 Package/gage.sh:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -905,11 +909,11 @@ all: config.h
 #  Phony target (prerequisite of .PHONY).
 #  Command line target.
 #  Implicit rule search has not been done.
- 
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
+ 
 # Load=0/32=0%, Rehash=0, Collisions=0/6=0%
 #  recipe to execute (from 'Makefile', line 442):
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -942,8 +946,8 @@ installcheck: installcheck-recursive
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-
  
+
 .PHONY: all-recursive check-recursive cscopelist-recursive ctags-recursive dvi-recursive html-recursive info-recursive install-data-recursive install-dvi-recursive install-exec-recursive install-html-recursive install-info-recursive install-pdf-recursive install-ps-recursive install-recursive installcheck-recursive installdirs-recursive pdf-recursive ps-recursive tags-recursive uninstall-recursive mostlyclean-recursive clean-recursive distclean-recursive maintainer-clean-recursive CTAGS GTAGS TAGS all all-am am--refresh check check-am clean clean-cscope clean-generic clean-libtool cscope cscopelist-am ctags ctags-am dist dist-all dist-bzip2 dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip distcheck distclean distclean-generic distclean-hdr distclean-libtool distclean-tags distcleancheck distdir distuninstallcheck dvi dvi-am html html-am info info-am install install-am install-binSCRIPTS install-data install-data-am install-dvi install-dvi-am install-exec install-exec-am install-html install-html-am install-info install-info-am install-man install-pdf install-pdf-am install-ps install-ps-am install-strip installcheck installcheck-am installdirs installdirs-am maintainer-clean maintainer-clean-generic mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am uninstall-binSCRIPTS
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -955,6 +959,7 @@ Package/build_modules.sh:
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 # Not a target:
 CsTestQt:
 #  Implicit rule search has not been done.
@@ -982,7 +987,6 @@ distclean-generic:
 Sdk/GageMultipleSystem/Makefile:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 
 clean-generic:
@@ -991,6 +995,7 @@ clean-generic:
 #  File does not exist.
 #  File has not been updated.
 
+ 
 # Not a target:
 Sdk/C_Common/CsSdkMisc.c:
 #  Implicit rule search has not been done.
@@ -1013,6 +1018,7 @@ configure.ac:
 #  Implicit rule search has been done.
 #  Last modified 2019-06-21 02:02:15
 #  File has been updated.
+ 
 #  Successfully updated.
 
 all-am: Makefile Package/gagehp.sh config.h
@@ -1020,7 +1026,6 @@ all-am: Makefile Package/gagehp.sh config.h
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
- 
 
 distclean: distclean-recursive
 #  Phony target (prerequisite of .PHONY).
@@ -1049,6 +1054,7 @@ Package/gage.conf:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 
 # Not a target:
 Sdk/Advanced/GageCsPrf/Prf.ini:
@@ -1069,7 +1075,6 @@ Sdk/Advanced/GageEvents/Events.h:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
- 
 
 .SUFFIXES:
 #  Implicit rule search has not been done.
@@ -1085,6 +1090,7 @@ tags: tags-recursive
 uninstall: uninstall-recursive
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
+ 
 #  File does not exist.
 #  File has not been updated.
 
@@ -1109,7 +1115,8 @@ info: info-recursive
 Makefile: Makefile.in config.status
 #  Precious file (prerequisite of .PRECIOUS).
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-23 11:31:56.419151842
+ 
+#  Last modified 2022-07-11 13:24:12.272867652
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 461):
@@ -1120,7 +1127,6 @@ Makefile: Makefile.in config.status
 	  *) \
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
- 
 	esac;
 
 # Not a target:
@@ -1131,7 +1137,7 @@ Include:
 
 Makefile.in: Makefile.am configure.ac aclocal.m4
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-23 11:31:54.215204535
+#  Last modified 2022-07-11 13:24:08.02082661
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 448):
@@ -1146,6 +1152,7 @@ Makefile.in: Makefile.am configure.ac aclocal.m4
 	done; \
 	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile'; \
 	$(am__cd) $(top_srcdir) && \
+ 
 	  $(AUTOMAKE) --foreign Makefile
 
 distclean-am: clean-am distclean-generic distclean-hdr distclean-libtool distclean-tags
@@ -1170,7 +1177,6 @@ Sdk/Advanced/GageCsPrf/GageCsPrf.c:
 # Not a target:
 Sdk/C_Common/CsSdkMisc.h:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -1182,6 +1188,7 @@ depcomp:
 
 installcheck-recursive:
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1232,6 +1239,7 @@ install-data-recursive:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 545):
 	@fail=; \
 	if $(am__make_keepgoing); then \
@@ -1262,7 +1270,6 @@ install-data-recursive:
 
 tags-am: config.h.in
 #  Phony target (prerequisite of .PHONY).
- 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1314,6 +1321,7 @@ uninstall-binSCRIPTS:
 	dir='$(DESTDIR)$(bindir)'; $(am__uninstall_files_from_dir)
 
 # Not a target:
+ 
 Sdk/GageComplexTrigger/ComplexTrigger.c:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -1341,7 +1349,6 @@ distclean-tags:
 
 # Not a target:
 Makefile.am:
- 
 #  Implicit rule search has been done.
 #  Last modified 2019-06-21 01:49:43
 #  File has been updated.
@@ -1349,6 +1356,7 @@ Makefile.am:
 
 cscope: cscope.files
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1378,6 +1386,7 @@ mostlyclean: mostlyclean-recursive
 #  File has not been updated.
 
 # Not a target:
+ 
 Package/dkms.conf:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -1421,7 +1430,6 @@ dist-shar: distdir
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
- 
 #  recipe to execute (from 'Makefile', line 732):
 	@echo WARNING: "Support for shar distribution archives is" \
 	               "deprecated." >&2
@@ -1435,6 +1443,7 @@ Sdk/Advanced/GageStream2Analysis/Stream2Analysis.c:
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 distcheck: dist
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
@@ -1508,8 +1517,8 @@ config.guess:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-
  
+
 # Not a target:
 Boards/KernelSpace:
 #  Implicit rule search has not been done.
@@ -1575,6 +1584,7 @@ dvi-am:
 # Not a target:
 Package/driver.sh:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -1585,7 +1595,6 @@ Package/gagehp.sh:
 #  File has not been updated.
 
 install-info-am:
- 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -1615,6 +1624,7 @@ Sdk/Advanced/GageCsPrf/GageCsPrf.h:
 # Not a target:
 Sdk/Advanced/GageStream2Disk/Stream2Disk.c:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -1641,11 +1651,11 @@ distclean-hdr:
 config.sub:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 
 maintainer-clean-generic:
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1698,6 +1708,7 @@ pdf-recursive:
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
+ 
 	@fail=; \
 	if $(am__make_keepgoing); then \
 	  failcom='fail=yes'; \
@@ -1727,11 +1738,10 @@ pdf-recursive:
 
 config.status: configure
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-23 11:31:56.271155382
+#  Last modified 2022-07-11 13:24:11.792863021
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 471):
- 
 	$(SHELL) ./config.status --recheck
 
 # Not a target:
@@ -1742,6 +1752,7 @@ Sdk/Advanced/GageStream2Analysis/Stream2Analysis.h:
 
 .MAKE: all-recursive check-recursive cscopelist-recursive ctags-recursive dvi-recursive html-recursive info-recursive install-data-recursive install-dvi-recursive install-exec-recursive install-html-recursive install-info-recursive install-pdf-recursive install-ps-recursive install-recursive installcheck-recursive installdirs-recursive pdf-recursive ps-recursive tags-recursive uninstall-recursive mostlyclean-recursive clean-recursive distclean-recursive maintainer-clean-recursive all install-am install-strip
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -1774,10 +1785,10 @@ aclocal.m4: configure.ac
 install-html-recursive:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
- 
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
+ 
 	@fail=; \
 	if $(am__make_keepgoing); then \
 	  failcom='fail=yes'; \
@@ -1829,6 +1840,7 @@ config.h: stamp-h1
 #  Last modified 2022-06-10 17:32:28.25937976
 #  File has been updated.
 #  Needs to be updated (-q is set).
+ 
 # automatic
 # @ := config.h
 # automatic
@@ -1843,7 +1855,6 @@ config.h: stamp-h1
 # < := stamp-h1
 # automatic
 # ^ := stamp-h1
- 
 # automatic
 # ? := stamp-h1
 # variable set hash-table stats:
@@ -1861,6 +1872,7 @@ Sdk/Advanced/GageStream2Disk/Stream2Disk.h:
 check-recursive:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
+ 
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
@@ -1913,9 +1925,9 @@ ltmain.sh:
 #  Modification time never checked.
 #  File has not been updated.
 
- 
 install-data: install-data-recursive
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
@@ -1942,10 +1954,11 @@ Sdk/SDK_README.TXT:
 
 stamp-h1: config.h.in config.status
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-23 11:31:56.599147537
+#  Last modified 2022-07-11 13:24:12.436869234
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 484):
+ 
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
 
@@ -1961,7 +1974,6 @@ Sdk/GageMultipleSystem/System2.ini:
 #  Modification time never checked.
 #  File has not been updated.
 
- 
 am--refresh: Makefile
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
@@ -1975,6 +1987,7 @@ install-dvi-recursive:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 545):
 	@fail=; \
 	if $(am__make_keepgoing); then \
@@ -2050,8 +2063,8 @@ installdirs-recursive:
 
 info-recursive:
 #  Phony target (prerequisite of .PHONY).
-#  Implicit rule search has not been done.
  
+#  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
@@ -2169,6 +2182,7 @@ ps-recursive:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 545):
 	@fail=; \
 	if $(am__make_keepgoing); then \
@@ -2202,7 +2216,6 @@ installcheck-am:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
- 
 
 # Not a target:
 Sdk/GageMultipleSystem/MultipleSystem.h:
@@ -2256,6 +2269,7 @@ dist:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 744):
 	$(MAKE) $(AM_MAKEFLAGS) $(DIST_TARGETS) am__post_remove_distdir='@:'
+ 
 	$(am__post_remove_distdir)
 
 maintainer-clean-recursive:
@@ -2339,8 +2353,8 @@ ps-am:
 # Not a target:
 Sdk/C_Common/CsSdkUtil.h:
 #  Implicit rule search has not been done.
-#  Modification time never checked.
  
+#  Modification time never checked.
 #  File has not been updated.
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -2403,6 +2417,7 @@ uninstall-recursive:
 Sdk/GageDeepAcquisition/Makefile:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 # Not a target:
@@ -2433,11 +2448,11 @@ Package/README.user.txt:
 #  File has not been updated.
 
 all-recursive:
- 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 545):
 	@fail=; \
 	if $(am__make_keepgoing); then \
@@ -2501,12 +2516,12 @@ Sdk/Advanced/GageEvents/Makefile:
 
 # Not a target:
 Sdk/GageAcquire/Makefile:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 distcleancheck:
- 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -2551,6 +2566,7 @@ install-html: install-html-recursive
 
 # Not a target:
 ar-lib:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -2603,12 +2619,12 @@ check: check-recursive
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
- 
 #  File has not been updated.
 
 install-exec-recursive:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
+ 
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 545):
@@ -2692,6 +2708,7 @@ install-ps: install-ps-recursive
 # Not a target:
 Sdk/Advanced/GageCsPrf/Makefile:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -2700,7 +2717,6 @@ TAGS: tags
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
- 
 
 installdirs: installdirs-recursive
 #  Phony target (prerequisite of .PHONY).
@@ -2720,6 +2736,7 @@ install-dvi: install-dvi-recursive
 #  File does not exist.
 #  File has not been updated.
 
+ 
 distdir: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in ar-lib compile config.guess config.sub depcomp install-sh ltmain.sh missing Include Boards/KernelSpace Package/rpm/gage-driver.spec Package/dkms.conf Package/build_modules.sh Package/clean_modules.sh Package/driver.sh Package/gage.conf Package/gage.sh Package/gagehp.sh Package/gage-driver.conf Package/register_dkms.sh Package/README.user.txt README.txt Boards/Csi/CsSplenda/cse16xyo.csi Boards/Csi/CsSplenda/cse16xyy.csi CsTestQt Sdk/Makefile Sdk/SDK_README.TXT Sdk/C_Common/CsSdkMisc.c Sdk/C_Common/CsSdkMisc.h Sdk/C_Common/CsSdkUtil.c Sdk/C_Common/CsSdkUtil.h Sdk/C_Common/CsTchar.h Sdk/GageAcquire/Acquire.c Sdk/GageAcquire/Acquire.ini Sdk/GageAcquire/Makefile Sdk/GageCoerce/Coerce.c Sdk/GageCoerce/Coerce.h Sdk/GageCoerce/Coerce.ini Sdk/GageCoerce/Makefile Sdk/GageComplexTrigger/ComplexTrigger.c Sdk/GageComplexTrigger/ComplexTrigger.ini Sdk/GageComplexTrigger/Makefile Sdk/GageDeepAcquisition/DeepAcquisition.c Sdk/GageDeepAcquisition/DeepAcquisition.ini Sdk/GageDeepAcquisition/Makefile Sdk/GageMultipleRecord/Makefile Sdk/GageMultipleRecord/MultipleRecord.c Sdk/GageMultipleRecord/MultipleRecord.ini Sdk/GageMultipleSystem/Makefile Sdk/GageMultipleSystem/MultipleSystem.c Sdk/GageMultipleSystem/MultipleSystem.h Sdk/GageMultipleSystem/System1.ini Sdk/GageMultipleSystem/System2.ini Sdk/Advanced/GageEvents/Events.c Sdk/Advanced/GageEvents/Events.h Sdk/Advanced/GageEvents/Events.ini Sdk/Advanced/GageEvents/Makefile Sdk/Advanced/GageEvents/Threads.c Sdk/Advanced/GageStream2Analysis/Makefile Sdk/Advanced/GageStream2Analysis/Stream2Analysis.c Sdk/Advanced/GageStream2Analysis/Stream2Analysis.h Sdk/Advanced/GageStream2Analysis/Stream2Analysis.ini Sdk/Advanced/GageStream2Disk/Makefile Sdk/Advanced/GageStream2Disk/Stream2Disk.c Sdk/Advanced/GageStream2Disk/Stream2Disk.h Sdk/Advanced/GageStream2Disk/Stream2Disk.ini Sdk/Advanced/GageCsPrf/Makefile Sdk/Advanced/GageCsPrf/GageCsPrf.c Sdk/Advanced/GageCsPrf/GageCsPrf.h Sdk/Advanced/GageCsPrf/Prf.ini
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
@@ -2792,12 +2809,12 @@ distdir: Makefile.am configure configure.ac aclocal.m4 Makefile.in config.h.in a
 
 install-html-am:
 #  Phony target (prerequisite of .PHONY).
+ 
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
 
 # Not a target:
- 
 Package/gage-driver.conf:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -2874,6 +2891,7 @@ install: install-recursive
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 
 install-ps-am:
 #  Phony target (prerequisite of .PHONY).
@@ -2915,7 +2933,6 @@ mostlyclean-recursive:
 	fi; test -z "$$fail"
 
 # files hash-table stats:
- 
 # Load=195/1024=19%, Rehash=0, Collisions=63/505=12%
 # VPATH Search Paths
 
@@ -2923,12 +2940,13 @@ mostlyclean-recursive:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 217 / storage = 3799 B / avg = 17 B
-# current buf: size = 8162 B / used = 3799 B / count = 217 / avg = 17 B
+# strcache buffers: 1 (0) / strings = 218 / storage = 3804 B / avg = 17 B
+# current buf: size = 8162 B / used = 3804 B / count = 218 / avg = 17 B
 
-# strcache performance: lookups = 581 / hit rate = 62%
+# strcache performance: lookups = 582 / hit rate = 62%
 # hash-table stats:
-# Load=217/8192=3%, Rehash=0, Collisions=16/581=3%
-# Finished Make data base on Thu Jun 23 11:32:05 2022
+ 
+# Load=218/8192=3%, Rehash=0, Collisions=16/582=3%
+# Finished Make data base on Mon Jul 11 13:24:18 2022
 
  

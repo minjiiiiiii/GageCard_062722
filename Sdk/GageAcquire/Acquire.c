@@ -27,6 +27,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
+//maximum sampling rate of cse 1242 : 200MS/s 
+
 #ifdef _WIN32
 #include <windows.h>
 #include <stdio.h>
@@ -39,496 +41,552 @@
 #include "CsSdkMisc.h"
 
 #include <time.h>
-clock_t clock(void);
 
 int _tmain()
 {
-   int32                   	i32Status = CS_SUCCESS; //CS_SUCCESS defined as 1(Successful operation)
-   uInt32                  	i;
-   TCHAR                   	szFileName[MAX_PATH]; //define MAX_PATH 256
-   int64					i64StartOffset = 0;
-   void*                   	pBuffer = NULL;
-   float*                  	pVBuffer = NULL;
-   uInt32                  	u32Mode;
-   CSHANDLE                	hSystem = 0;    //CSHANDLE: uint32 
-   IN_PARAMS_TRANSFERDATA  	InData = {0};
-   OUT_PARAMS_TRANSFERDATA 	OutData = {0};
-   CSSYSTEMINFO            	CsSysInfo = {0};
-   CSAPPLICATIONDATA       	CsAppData = {0};
-   LPCTSTR                 	szIniFile = _T("Acquire.ini");  //_T: _UNICODE가 define 되어 있으면 L"문자열" 리턴 _UNICODE가 define 되어 있지 않으면 "문자열" 리턴
-   FileHeaderStruct        	stHeader = {0}; 
-   CSACQUISITIONCONFIG     	CsAcqCfg = {0};
-   CSCHANNELCONFIG         	CsChanCfg = {0};
-   uInt32                  	u32ChannelIndexIncrement;
-   ARRAY_BOARDINFO         	*pArrayBoardInfo=NULL;
+int32 i32Status = CS_SUCCESS; //CS_SUCCESS defined as 1(Successful operation)
+uInt32 i;
+TCHAR szFileName[MAX_PATH]; //define MAX_PATH 256
+int64 i64StartOffset = 0;
+void* pBuffer = NULL;
+float* pVBuffer = NULL;
+uInt32 u32Mode;
+CSHANDLE hSystem = 0; //CSHANDLE: uint32 
+IN_PARAMS_TRANSFERDATA InData = {0};
+OUT_PARAMS_TRANSFERDATA OutData = {0};
+CSSYSTEMINFO CsSysInfo = {0};
+CSAPPLICATIONDATA CsAppData = {0};
+LPCTSTR szIniFile = _T("Acquire.ini"); //_T: _UNICODE가 define 되어 있으면 L"문자열" 리턴 _UNICODE가 define 되어 있지 않으면 "문자열" 리턴
+FileHeaderStruct stHeader = {0}; 
+CSACQUISITIONCONFIG CsAcqCfg = {0};
+CSCHANNELCONFIG CsChanCfg = {0};
+uInt32 u32ChannelIndexIncrement;
+ARRAY_BOARDINFO *pArrayBoardInfo=NULL;
 
-   int64					i64Padding = 64; //extra samples to capture to ensure we get what we ask for
-   int64					i64SavedLength;
-   int64					i64MaxLength;
-   int64					i64MinSA;
-   int64             		i64Status = 0;
+int64 i64Padding = 64; //extra samples to capture to ensure we get what we ask for
+int64 i64SavedLength;
+int64 i64MaxLength;
+int64 i64MinSA;
+int64 i64Status = 0;
+clock_t clock(void); 
+//for execution time 
+double start,end;
+start = (double)clock()/CLOCKS_PER_SEC;
 
-   
-   //for execution time 
-   //double start,end;
-   //start = (double)clock()/CLOCKS_PER_SEC;
-
-
-   /*
-      Initializes the CompuScope boards found in the system. If the
-      system is not found a message with the error code will appear.
-      Otherwise i32Status will contain the number of systems found.
-   */
-   i32Status = CsInitialize();
-   if (0 == i32Status)
-   {
-      printf("\nNo CompuScope systems found\n");
-      return (-1);
-   }
-   if (CS_FAILED(i32Status))
-   {
-      DisplayErrorString(i32Status);
-      return (-1);
-   }
-   /*
-      Get the system. This sample program only supports one system. If
-      2 systems or more are found, the first system that is found
-      will be the system that will be used. hSystem will hold a unique
-      system identifier that is used when referencing the system.
-   */
-   i32Status = CsGetSystem(&hSystem, 0, 0, 0, 0);
-   if (CS_FAILED(i32Status))
-   {
-      DisplayErrorString(i32Status);
-      return (-1);
-   }
-   /*
-      Get System information. The u32Size field must be filled in
-      prior to calling CsGetSystemInfo
-   */
-   CsSysInfo.u32Size = sizeof(CSSYSTEMINFO);
-   i32Status = CsGetSystemInfo(hSystem, &CsSysInfo);
-
-   pArrayBoardInfo = VirtualAlloc (NULL, ((CsSysInfo.u32BoardCount - 1) * sizeof(CSBOARDINFO)) + sizeof(ARRAY_BOARDINFO), MEM_COMMIT, PAGE_READWRITE);
-   if (!pArrayBoardInfo)
-   {
-      printf (_T("\nUnable to allocate memory\n"));
-      CsFreeSystem(hSystem);
-      return (-1);
-   }
-   pArrayBoardInfo->u32BoardCount = CsSysInfo.u32BoardCount;
-   for (i = 0; i < pArrayBoardInfo->u32BoardCount; i++)
-   {
-      pArrayBoardInfo->aBoardInfo[i].u32BoardIndex = i + 1;
-      pArrayBoardInfo->aBoardInfo[i].u32Size = sizeof(CSBOARDINFO);
-   }
-   i32Status = CsGet(hSystem, CS_BOARD_INFO, CS_ACQUISITION_CONFIGURATION, pArrayBoardInfo);
-
-   /*
-   Display the system name from the driver
-   */
-   printf(_T("\nBoard Name: %s"), CsSysInfo.strBoardName);
-   for (i = 0; i < pArrayBoardInfo->u32BoardCount; i++)
-   {
-      printf(_T("\n\tSerial[%d]: %s"), i, pArrayBoardInfo->aBoardInfo[i].strSerialNumber);
-     
-   }
-   printf(_T("\n"));
-
-   i32Status = CsAs_ConfigureSystem(hSystem, (int)CsSysInfo.u32ChannelCount, 1, (LPCTSTR)szIniFile, &u32Mode);
-   if (CS_FAILED(i32Status))
-   {
-      if (CS_INVALID_FILENAME == i32Status)
-      {
-         /*
-            Display message but continue on using defaults.
-            */
-         printf(_T("\nCannot find %s - using default parameters."), szIniFile);
-      }
-      else
-      {
-         /*
-            Otherwise the call failed.  If the call did fail we should free the CompuScope
-            system so it's available for another application
-            */
-         DisplayErrorString(i32Status);
-         CsFreeSystem(hSystem);
-         VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-         return(-1);
-      }
-   }
-   /*
-      If the return value is greater than  1, then either the application,
-      acquisition, some of the Channel and / or some of the Trigger sections
-      were missing from the ini file and the default parameters were used.
-      */
-   if (CS_USING_DEFAULT_ACQ_DATA & i32Status)
-      printf(_T("\nNo ini entry for acquisition. Using defaults."));
-   if (CS_USING_DEFAULT_CHANNEL_DATA & i32Status)
-      printf(_T("\nNo ini entry for one or more Channels. Using defaults for missing items."));
-
-   if (CS_USING_DEFAULT_TRIGGER_DATA & i32Status)
-      printf(_T("\nNo ini entry for one or more Triggers. Using defaults for missing items."));
-
-   i32Status = CsAs_LoadConfiguration(hSystem, szIniFile, APPLICATION_DATA, &CsAppData);
-   if (CS_FAILED(i32Status))
-   {
-      if (CS_INVALID_FILENAME == i32Status)
-      {
-         printf(_T("\nUsing default application parameters."));
-      }
-      else
-      {
-         DisplayErrorString(i32Status);
-         CsFreeSystem(hSystem);
-         VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-         return -1;
-      }
-   }
-   else if (CS_USING_DEFAULT_APP_DATA & i32Status)
-   {
-      /*
-         If the return value is CS_USING_DEFAULT_APP_DATA (defined in ConfigSystem.h)
-         then there was no entry in the ini file for Application and we will use
-         the application default values, which have already been set.
-         */
-      printf(_T("\nNo ini entry for application data. Using defaults."));
-   }
-
-   /*
-      Commit the values to the driver.  This is where the values get sent to the
-      hardware.  Any invalid parameters will be caught here and an error returned.
-   */
-   i32Status = CsDo(hSystem, ACTION_COMMIT);
-   if (CS_FAILED(i32Status))
-   {
-      DisplayErrorString(i32Status);
-      CsFreeSystem(hSystem);
-      VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-      return (-1);
-   }
-   /*
-      Get the current sample size, resolution and offset parameters from the driver
-      by calling CsGet for the ACQUISTIONCONFIG structure. These values are used
-      when saving the file.
-   */
-   CsAcqCfg.u32Size = sizeof(CSACQUISITIONCONFIG);
-   i32Status = CsGet(hSystem, CS_ACQUISITION, CS_ACQUISITION_CONFIGURATION, &CsAcqCfg);
-   if (CS_FAILED(i32Status))
-   {
-      DisplayErrorString(i32Status);
-      CsFreeSystem(hSystem);
-      VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-      return (-1);
-   }
-
-   /*
-      We need to allocate a buffer
-      for transferring the data
-   */
-   pBuffer  = VirtualAlloc(NULL, (size_t)((CsAppData.i64TransferLength + i64Padding) * CsAcqCfg.u32SampleSize), MEM_COMMIT, PAGE_READWRITE);
-   if (NULL == pBuffer)
-   {
-      printf (_T("\nUnable to allocate memory\n"));
-      CsFreeSystem(hSystem);
-      VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-      return (-1);
-   }
-
-   if (TYPE_FLOAT == CsAppData.i32SaveFormat)
-   {
-      /*
-         Allocate another buffer to pass the data that is going to be converted
-         into voltages
-      */
-      pVBuffer  = (float *)VirtualAlloc(NULL, (size_t)(CsAppData.i64TransferLength * sizeof(float)), MEM_COMMIT, PAGE_READWRITE);
-      if (NULL == pVBuffer)
-      {
-         printf (_T("\nUnable to allocate memory\n"));
-         CsFreeSystem(hSystem);
-         VirtualFree(pBuffer, 0, MEM_RELEASE);
-         VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-         return (-1);
-      }
-   }
-
-   /*
-      <===  If you want to perform a repetitive capture start your loop here.
-      */
-
-
-   /*
-      Start the data acquisition
-   */
-   i32Status = CsDo(hSystem, ACTION_START);
-   if (CS_FAILED(i32Status))
-   {
-      DisplayErrorString(i32Status);
-      CsFreeSystem(hSystem);
-      VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-      return (-1);
-   }
-
-   if (!DataCaptureComplete(hSystem))
-   {
-      CsFreeSystem(hSystem);
-      VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-      return (-1);
-   }
-
-   /*
-      Acquisition is now complete.
-
-
-      Fill in the InData structure for transferring the data
-      */
-   /*
-      Non multiple record captures should have the segment set to 1.
-      InData.u32Mode refers to the transfer mode. Regular transfer is 0
-      */
-   InData.u32Segment = 1;
-   InData.u32Mode = TxMODE_DEFAULT;
-
-   /*
-   Validate the start address and the length.  This is especially necessary if
-   trigger delay is being used
-   */
-   i64MinSA = CsAcqCfg.i64TriggerDelay + CsAcqCfg.i64Depth - CsAcqCfg.i64SegmentSize;
-   if (CsAppData.i64TransferStartPosition < i64MinSA)
-   {
-	   _ftprintf(stdout, _T("\nInvalid Start Address was changed from %lli to %lli\n"), (long long)CsAppData.i64TransferStartPosition, (long long)i64MinSA);
-	   CsAppData.i64TransferStartPosition = i64MinSA;
-   }
-
-   i64MaxLength = CsAcqCfg.i64TriggerDelay + CsAcqCfg.i64Depth - i64MinSA;
-   if (CsAppData.i64TransferLength > i64MaxLength)
-   {
-	   _ftprintf(stdout, _T("\nInvalid Transfer Length was changed from %lli to %lli\n"), (long long)CsAppData.i64TransferLength, (long long)i64MaxLength);
-	   CsAppData.i64TransferLength = i64MaxLength;
-   }
-
-   InData.i64StartAddress = CsAppData.i64TransferStartPosition;
-   /*
-   	We transfer a little more than we need so we're sure to get what we requested, regardless of any hw alignment issuses
-   */
-   InData.i64Length =  CsAppData.i64TransferLength + i64Padding;
-   InData.pDataBuffer = pBuffer;
-
-   u32ChannelIndexIncrement = CsAs_CalculateChannelIndexIncrement(&CsAcqCfg, &CsSysInfo );
-
-   for   (i = 1; i <= CsSysInfo.u32ChannelCount; i += u32ChannelIndexIncrement)
-   {
-      /*
-         Variable that will contain either raw data or data in Volts depending on requested format
-         */
-      void* pSrcBuffer = NULL;
-
-      ZeroMemory(pBuffer,(size_t)((CsAppData.i64TransferLength + i64Padding) * CsAcqCfg.u32SampleSize));
-      InData.u16Channel = (uInt16)i;
-      /*
-         Transfer the captured data
-      */
-      i32Status = CsTransfer(hSystem, &InData, &OutData);
-      if (CS_FAILED(i32Status))
-      {
-         DisplayErrorString(i32Status);
-         if (NULL != pBuffer)
-            VirtualFree(pBuffer, 0, MEM_RELEASE);
-         if (NULL != pVBuffer)
-            VirtualFree(pVBuffer, 0, MEM_RELEASE);
-         CsFreeSystem(hSystem);
-         VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-         return (-1);
-      }
-      /*
-		Note: to optimize the transfer loop, everything from
-		this point on in the loop could be moved out and done
-		after all the channels are transferred.
-      */
-      /*
-         Assign a file name for each channel that we want to save
-         */
-      _stprintf(szFileName, _T("%s_CH%u.dat"), CsAppData.lpszSaveFileName, i);
-      /*
-         Gather up the information needed for the volt conversion and/or file header
-         */
-      CsChanCfg.u32Size = sizeof(CSCHANNELCONFIG);
-      CsChanCfg.u32ChannelIndex = i;
-      CsGet(hSystem, CS_CHANNEL, CS_ACQUISITION_CONFIGURATION, &CsChanCfg);
-	  i64StartOffset = InData.i64StartAddress - OutData.i64ActualStart;
-	  if (i64StartOffset < 0)
-	  {
-		  i64StartOffset = 0;
-		  InData.i64StartAddress = OutData.i64ActualStart;
-	  }
-
-	  /*
-	  Save the smaller of the requested transfer length or the actual transferred length
-	  */
-	  OutData.i64ActualLength -= i64StartOffset;
-	  i64SavedLength = CsAppData.i64TransferLength <= OutData.i64ActualLength ? CsAppData.i64TransferLength : OutData.i64ActualLength;
-
-      if (TYPE_FLOAT == CsAppData.i32SaveFormat)
-      {
-         /*
-            Call the ConvertToVolts function. This function will convert the raw
-            data to voltages. We pass the saved length, which will be converted
-            from 0 to actual length.  Invalid samples at the beginning are
-            skipped over here.
-         */
-         i32Status = CsAs_ConvertToVolts(i64SavedLength, CsChanCfg.u32InputRange, CsAcqCfg.u32SampleSize,
-                                         CsAcqCfg.i32SampleOffset, CsAcqCfg.i32SampleRes,
-                                         CsChanCfg.i32DcOffset, (void *)((unsigned char *)pBuffer + (i64StartOffset * CsAcqCfg.u32SampleSize)),
-										 pVBuffer);
-         if (CS_FAILED(i32Status))
-         {
-            DisplayErrorString(i32Status);
-            continue;
-         }
-
-         pSrcBuffer = (void *)pVBuffer;
-      }
-      else
-      {
-         pSrcBuffer = (void *)((unsigned char *)pBuffer + (i64StartOffset * CsAcqCfg.u32SampleSize));
-      }
-      /*
-         The driver may have had to change the start address and length
-         due to alignment issues, so we'll get the actual start and length
-         from the driver.
-         */
-      stHeader.i64SampleRate = CsAcqCfg.i64SampleRate;
-      stHeader.i64Start = InData.i64StartAddress;
-      stHeader.i64Length = i64SavedLength;
-      stHeader.u32SampleSize = CsAcqCfg.u32SampleSize;
-      stHeader.i32SampleRes = CsAcqCfg.i32SampleRes;
-      stHeader.i32SampleOffset = CsAcqCfg.i32SampleOffset;
-      stHeader.u32InputRange = CsChanCfg.u32InputRange;
-      stHeader.i32DcOffset = CsChanCfg.i32DcOffset;
-      stHeader.u32SegmentCount = CsAcqCfg.u32SegmentCount;
-      stHeader.u32SegmentNumber = InData.u32Segment;
-      stHeader.dTimeStamp = NO_TIME_STAMP_VALUE;
-
-	  // For sig files we treat each multiple record segment of the capture as a separate file
-	  stHeader.u32SegmentCount = (TYPE_SIG == CsAppData.i32SaveFormat) ? 1 : CsAcqCfg.u32SegmentCount;
-	  stHeader.u32SegmentNumber = (TYPE_SIG == CsAppData.i32SaveFormat) ? 1 : InData.u32Segment;
-
-      i64Status = (int64)CsAs_SaveFile(szFileName, pSrcBuffer, CsAppData.i32SaveFormat, &stHeader);
-      if ( 0 > i64Status )
-      {
-         if (CS_MISC_ERROR == i64Status)
-         {
-            printf(_T("\n"));
-            printf(_T("%s\n"), CsAs_GetLastFileError());
-         }
-         else
-         {
-            DisplayErrorString(i64Status);
-         }
-         continue;
-      }
-   }
-    
-      /////////////////////////////CSSYSTEMINFO/////////////////////////////////
-      printf(_T("\n\tSize of Board Serial Number : %zu"), sizeof(pArrayBoardInfo->aBoardInfo[i].strSerialNumber));
-      printf(_T("\n\tCSSYSTEMINFO.i64MaxMemory : %ld"), CsSysInfo.i64MaxMemory); //4GB 
-      printf(_T("\n\tCSSYSTEMINFO.u32size : %u"), CsSysInfo.u32Size); //
-      printf(_T("\n\tCSSYSTEMINFO.u32SampleBits : %u"), CsSysInfo.u32SampleBits); //
-      printf(_T("\n\tCSSYSTEMINFO.i32SampleResolution : %d"), CsSysInfo.i32SampleResolution); //
-      printf(_T("\n\tCSSYSTEMINFO.u32SampleSize : %u"), CsSysInfo.u32SampleSize); //
-      printf(_T("\n\tCSSYSTEMINFO.i32SampleOffset : %d"), CsSysInfo.i32SampleOffset); //
-      printf(_T("\n\tCSSYSTEMINFO.u32BoardType : %u"), CsSysInfo.u32BoardType); //
-      printf(_T("\n\tCSSYSTEMINFO.u32AddonOptions : %u"), CsSysInfo.u32AddonOptions); //
-      printf(_T("\n\tCSSYSTEMINFO.u32BoardCount : %u"), CsSysInfo.u32BoardCount); //
-      printf(_T("\n\tCSSYSTEMINFO.u32BaseBoardOptions : %u"), CsSysInfo.u32BaseBoardOptions); //
-      printf(_T("\n\tCSSYSTEMINFO.u32TriggerMachineCount : %u"), CsSysInfo.u32TriggerMachineCount); //
-      printf(_T("\n\tCSSYSTEMINFO.u32ChannelCount : %u\n"), CsSysInfo.u32ChannelCount); //
-   
-      ///////////////////////////CSAPPLICATIONDATA////////////////////////////////
-      printf(_T("\n\tCsAppData.i64TransferStartPosition : %ld"), CsAppData.i64TransferStartPosition); //
-      printf(_T("\n\tCsAppData.u32size : %ld"), CsAppData.i64TransferLength); //
-      printf(_T("\n\tCsAppData.u32SampleBits : %u"), CsAppData.u32TransferSegmentStart); //
-      printf(_T("\n\tCsAppData.i32SampleResolution : %u"), CsAppData.u32TransferSegmentCount); //
-      printf(_T("\n\tCsAppData.u32SampleSize : %u"), CsAppData.u32PageSize); //
-      printf(_T("\n\tCsAppData.i32SampleOffset : %d\n"), CsAppData.i32SaveFormat); //
-
-      ///////////////////////////FileHeaderStruct////////////////////////////////
-      printf(_T("\n\tFileHeaderStruct.i64Start : %ld"), stHeader.i64Start); //
-      printf(_T("\n\tFileHeaderStruct.i64Length : %ld"), stHeader.i64Length); //
-      printf(_T("\n\tFileHeaderStruct.i64SampleRate : %ld"), stHeader.i64SampleRate); //
-      printf(_T("\n\tFileHeaderStruct.dTimeStamp : %f"), stHeader.dTimeStamp); //
-      printf(_T("\n\tFileHeaderStruct.u32SegmentNumber : %u"), stHeader.u32SegmentNumber); //
-      printf(_T("\n\tFileHeaderStruct.u32SampleSize : %u"), stHeader.u32SampleSize); //
-      printf(_T("\n\tFileHeaderStruct.i32SampleRes : %d"), stHeader.i32SampleRes); //
-      printf(_T("\n\tFileHeaderStruct.i32SampleOffset : %d"), stHeader.i32SampleOffset); //
-      printf(_T("\n\tFileHeaderStruct.u32InputRange : %u"), stHeader.u32InputRange); //
-      printf(_T("\n\tFileHeaderStruct.i32DcOffset : %d"), stHeader.i32DcOffset); //
-      printf(_T("\n\tFileHeaderStruct.u32SegmentCount : %u"), stHeader.u32SegmentCount); //
-      printf(_T("\n\tFileHeaderStruct.u32AverageCount : %u\n"), stHeader.u32AverageCount); //
-
-      /////////////////////////////CSACQUISITIONCONFIG////////////////////////////
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32Size : %u"), CsAcqCfg.u32SampleSize); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32ExtClk : %u"), CsAcqCfg.u32ExtClk); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32ExtClkSampleSkip : %u"), CsAcqCfg.u32ExtClkSampleSkip); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32Mode : %u"), CsAcqCfg.u32Mode); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32Size : %u"), CsAcqCfg.u32SampleSize); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32SampleBits : %u"), CsAcqCfg.u32SampleBits); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32SampleSize : %u"), CsAcqCfg.u32SampleSize); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32SegmentCount : %u"), CsAcqCfg.u32SegmentCount); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32TrigEnginesEn : %u"), CsAcqCfg.u32TrigEnginesEn); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.u32TimeStampConfig : %u"), CsAcqCfg.u32TimeStampConfig); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64SampleRate : %ld"), CsAcqCfg.i64SampleRate); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64Depth : %ld"), CsAcqCfg.i64Depth); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64SegmentSize : %ld"), CsAcqCfg.i64SegmentSize); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerTimeout : %ld"), CsAcqCfg.i64TriggerTimeout); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerDelay : %ld"), CsAcqCfg.i64TriggerDelay); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerHoldoff : %ld"), CsAcqCfg.i64TriggerHoldoff); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i32SampleRes : %d"), CsAcqCfg.i32SampleRes); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i32SampleOffset : %d"), CsAcqCfg.i32SampleOffset); //
-      printf(_T("\n\tCSACQUISITIONCONFIG.i32SegmentCountHigh : %d\n"), CsAcqCfg.i32SegmentCountHigh); //
-
-      ///////////////////////////CSCHANNELCONFIG/////////////////////////////
-      printf(_T("\n\tCSCHANNELCONFIG.u32Size : %u"), CsChanCfg.u32Size); //
-      printf(_T("\n\tCSCHANNELCONFIG.u32ChannelIndex : %u"), CsChanCfg.u32ChannelIndex); //
-      printf(_T("\n\tCSCHANNELCONFIG.u32Term : %u"), CsChanCfg.u32Term); //
-      printf(_T("\n\tCSCHANNELCONFIG.u32InputRange : %u"), CsChanCfg.u32InputRange); //
-      printf(_T("\n\tCSCHANNELCONFIG.u32Impedance : %u"), CsChanCfg.u32Impedance); //
-      printf(_T("\n\tCSCHANNELCONFIG.u32Filter : %u"), CsChanCfg.u32Filter); //
-      printf(_T("\n\tCSCHANNELCONFIG.i32DcOffset : %d"), CsChanCfg.i32DcOffset); //
-      printf(_T("\n\tCSCHANNELCONFIG.i32Calib : %d\n"), CsChanCfg.i32Calib); //
-
-      printf(_T("\n\tu32ChannelIndexIncrement : %u\n"), u32ChannelIndexIncrement); //
-      ///////////////////////////ARRAY_BOARDINFO///////////////////////////////
-      printf(_T("\n\tARRAY_BOARDINFO.aBoardInfo[0] : %u"), pArrayBoardInfo->aBoardInfo[0].u32BoardIndex); //
-      printf(_T("\n\tARRAY_BOARDINFO.u32BoardCount : %u\n"), pArrayBoardInfo->u32BoardCount); //
-
-   /*
-      <=== End of the repetitive capture loop.
-      */
-   /*
-      Free any buffers that have been allocated
-      */
-   if ( NULL != pVBuffer )
-   {
-      VirtualFree(pVBuffer, 0, MEM_RELEASE);
-      pVBuffer = NULL;
-   }
-
-   if ( NULL != pBuffer)
-   {
-      VirtualFree(pBuffer, 0, MEM_RELEASE);
-      pBuffer = NULL;
-   }
-
-   /*
-      Free the CompuScope system and any resources it's been using
-      */
-   i32Status = CsFreeSystem(hSystem);
-   DisplayFinishString(CsAppData.i32SaveFormat);
-   VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
-   
-   //end = (((double)clock())/CLOCKS_PER_SEC);
-   //printf("Execution time : %lf ms\n", (end-start)*1000);
-
-   return 0;
+/*
+Initializes the CompuScope boards found in the system. If the
+system is not found a message with the error code will appear.
+Otherwise i32Status will contain the number of systems found.
+*/
+i32Status = CsInitialize();
+printf(_T("\n\ti32Status = 1 when succeeded\n"));
+printf(_T("\n\ti32Status(CsInitialize): %d\n"),i32Status); 
+printf("*****************************************************\n");
+if (0 == i32Status)
+{
+printf("\nNo CompuScope systems found\n");
+return (-1);
 }
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+return (-1);
+}
+/*
+Get the system. This sample program only supports one system. If
+2 systems or more are found, the first system that is found
+will be the system that will be used. hSystem will hold a unique
+system identifier that is used when referencing the system.
+*/
+i32Status = CsGetSystem(&hSystem, 0, 0, 0, 0);
+printf(_T("\n\ti32Status(CsGetSystem) : %d\n"),i32Status); 
+printf("*****************************************************\n");
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+return (-1);
+}
+/*
+Get System information. The u32Size field must be filled in
+prior to calling CsGetSystemInfo
+*/
+CsSysInfo.u32Size = sizeof(CSSYSTEMINFO);
+i32Status = CsGetSystemInfo(hSystem, &CsSysInfo);
+printf(_T("\n\ti32Status(CsGetSystemInfo) : %d\n"),i32Status); 
+printf(_T("\n\tsizeof(CSSYSTEMINFO) : %u\n"),CsSysInfo.u32Size); 
+printf(_T("\n\tCsSysInfo.u32BoardCount : %u\n"),CsSysInfo.u32BoardCount); 
+printf(_T("\n\tsizeof(CSBOARDINFO) : %lu\n"),sizeof(CSBOARDINFO));
+printf(_T("\n\tsizeof(ARRAY_BOARDINFO) : %lu\n"),sizeof(ARRAY_BOARDINFO));
+printf(_T("\n\tsizeof(CSSYSTEMINFO) : %lu\n"),sizeof(CSSYSTEMINFO));
+printf("*****************************************************\n");
+
+pArrayBoardInfo = VirtualAlloc (NULL, ((CsSysInfo.u32BoardCount - 1) * sizeof(CSBOARDINFO)) + sizeof(ARRAY_BOARDINFO), MEM_COMMIT, PAGE_READWRITE);
+//VirtualAlloc LPVOID VirtualAlloc(LPVOID lpAddress, DWORD dwSize, DWORD flAllocationType, DWORD flProtect);
+//lpAddress : NULL이면 system이 알아서 번지 할당, dwSize :할당하고자 하는 메모리의 양(byte단위), flAllocationType :MEM_COMMIT 이면 물리적 메모리(RAM,하드디스크) 할당, flProtect: PAGE_READWRITE :엑세스 타입 
+//가상메모리 크기/페이지 하나 당 크기 = 페이지 개수 
+printf(_T("\n\tCsAppData.i64TransferLength : %u"),(CsSysInfo.u32BoardCount - 1)); 
+printf(_T("\n\tsizeof(CSBOARDINFO) : %lu"),sizeof(CSBOARDINFO)); 
+printf(_T("\n\tsizeof(ARRAY_BOARDINFO) : %lu"),sizeof(ARRAY_BOARDINFO)); 
+printf(_T("\n\tThe size of the allocated memory : %lu\n"),((CsSysInfo.u32BoardCount - 1) * sizeof(CSBOARDINFO)) + sizeof(ARRAY_BOARDINFO));
+printf("*****************************************************\n");
+
+if (!pArrayBoardInfo)
+{
+printf (_T("\nUnable to allocate memory\n"));
+CsFreeSystem(hSystem);
+return (-1);
+}
+pArrayBoardInfo->u32BoardCount = CsSysInfo.u32BoardCount;
+for (i = 0; i < pArrayBoardInfo->u32BoardCount; i++)
+{
+pArrayBoardInfo->aBoardInfo[i].u32BoardIndex = i + 1;
+pArrayBoardInfo->aBoardInfo[i].u32Size = sizeof(CSBOARDINFO);
+}
+i32Status = CsGet(hSystem, CS_BOARD_INFO, CS_ACQUISITION_CONFIGURATION, pArrayBoardInfo);
+printf(_T("\n\ti32Status(CsGet) : %d\n"),i32Status); 
+/*
+Display the system name from the driver
+*/
+printf(_T("\nBoard Name: %s"), CsSysInfo.strBoardName);
+for (i = 0; i < pArrayBoardInfo->u32BoardCount; i++)
+{
+printf(_T("\n\tSerial[%d]: %s"), i, pArrayBoardInfo->aBoardInfo[i].strSerialNumber);
+}
+printf(_T("\n"));
+
+i32Status = CsAs_ConfigureSystem(hSystem, (int)CsSysInfo.u32ChannelCount, 1, (LPCTSTR)szIniFile, &u32Mode);
+printf(_T("\n\ti32Status(CsAs_Configuration) : %d\n"),i32Status); 
+if (CS_FAILED(i32Status))
+{
+if (CS_INVALID_FILENAME == i32Status)
+{
+/*
+Display message but continue on using defaults.
+*/
+printf(_T("\nCannot find %s - using default parameters."), szIniFile);
+}
+else
+{
+/*
+Otherwise the call failed. If the call did fail we should free the CompuScope
+system so it's available for another application
+*/
+DisplayErrorString(i32Status);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return(-1);
+}
+}
+/*
+If the return value is greater than 1, then either the application,
+acquisition, some of the Channel and / or some of the Trigger sections
+were missing from the ini file and the default parameters were used.
+*/
+if (CS_USING_DEFAULT_ACQ_DATA & i32Status)
+printf(_T("\nNo ini entry for acquisition. Using defaults."));
+if (CS_USING_DEFAULT_CHANNEL_DATA & i32Status)
+printf(_T("\nNo ini entry for one or more Channels. Using defaults for missing items."));
+
+if (CS_USING_DEFAULT_TRIGGER_DATA & i32Status)
+printf(_T("\nNo ini entry for one or more Triggers. Using defaults for missing items."));
+
+i32Status = CsAs_LoadConfiguration(hSystem, szIniFile, APPLICATION_DATA, &CsAppData);
+printf(_T("\n\ti32Status(CsAs_LoadConfiguration) : %d\n"),i32Status); 
+if (CS_FAILED(i32Status))
+{
+if (CS_INVALID_FILENAME == i32Status)
+{
+printf(_T("\nUsing default application parameters."));
+}
+else
+{
+DisplayErrorString(i32Status);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return -1;
+}
+}
+else if (CS_USING_DEFAULT_APP_DATA & i32Status)
+{
+/*
+If the return value is CS_USING_DEFAULT_APP_DATA (defined in ConfigSystem.h)
+then there was no entry in the ini file for Application and we will use
+the application default values, which have already been set.
+*/
+printf(_T("\nNo ini entry for application data. Using defaults."));
+}
+
+/*
+Commit the values to the driver. This is where the values get sent to the
+hardware. Any invalid parameters will be caught here and an error returned.
+*/
+i32Status = CsDo(hSystem, ACTION_COMMIT);
+printf(_T("\n\ti32Status(CsDo) : %d\n"),i32Status); 
+
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+
+/*
+Get the current sample size, resolution and offset parameters from the driver
+by calling CsGet for the ACQUISTIONCONFIG structure. These values are used
+when saving the file.
+*/
+CsAcqCfg.u32Size = sizeof(CSACQUISITIONCONFIG);
+i32Status = CsGet(hSystem, CS_ACQUISITION, CS_ACQUISITION_CONFIGURATION, &CsAcqCfg);
+printf(_T("\n\ti32Status(CsGet) : %d\n"),i32Status);
+printf(_T("CsAcqCfg.u32Size(size of CSAQUISITIONCONFIG) : %u \n"),CsAcqCfg.u32Size); 
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+
+/*
+We need to allocate a buffer
+for transferring the data
+*/
+pBuffer = VirtualAlloc(NULL, (size_t)((CsAppData.i64TransferLength + i64Padding) * CsAcqCfg.u32SampleSize), MEM_COMMIT, PAGE_READWRITE);
+printf(_T("\n\tCsAppData.i64TransferLength : %ld"),CsAppData.i64TransferLength); 
+printf(_T("\n\ti64Padding : %ld"),i64Padding); 
+printf(_T("\n\tCsAcqCfg.u32SampleSize : %u"),CsAcqCfg.u32SampleSize); 
+printf(_T("\n\tThe size of the allocated buffer : %lu\n"), (size_t)((CsAppData.i64TransferLength + i64Padding) * CsAcqCfg.u32SampleSize));
+printf("*****************************************************\n");
+
+if (NULL == pBuffer)
+{
+printf (_T("\nUnable to allocate memory\n"));
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+
+if (TYPE_FLOAT == CsAppData.i32SaveFormat)
+{
+/*
+Allocate another buffer to pass the data that is going to be converted
+into voltages
+*/
+pVBuffer = (float *)VirtualAlloc(NULL, (size_t)(CsAppData.i64TransferLength * sizeof(float)), MEM_COMMIT, PAGE_READWRITE);
+if (NULL == pVBuffer)
+{
+printf (_T("\nUnable to allocate memory\n"));
+CsFreeSystem(hSystem);
+VirtualFree(pBuffer, 0, MEM_RELEASE);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+}
+
+/*
+<=== If you want to perform a repetitive capture start your loop here.
+*/
+for(int j=0; j<5;j++) {
+
+
+/*
+Start the data acquisition
+*/
+i32Status = CsDo(hSystem, ACTION_START);
+printf(_T("\n\ti32Status(CsDo) : %d\n"),i32Status); 
+
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+
+if (!DataCaptureComplete(hSystem))
+{
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+
+/*
+Acquisition is now complete.
+
+Fill in the InData structure for transferring the data
+*/
+/*
+Non multiple record captures should have the segment set to 1.
+InData.u32Mode refers to the transfer mode. Regular transfer is 0
+*/
+InData.u32Segment = 1;
+InData.u32Mode = TxMODE_DEFAULT;
+
+/*
+Validate the start address and the length. This is especially necessary if
+trigger delay is being used
+*/
+i64MinSA = CsAcqCfg.i64TriggerDelay + CsAcqCfg.i64Depth - CsAcqCfg.i64SegmentSize;
+if (CsAppData.i64TransferStartPosition < i64MinSA)
+{
+_ftprintf(stdout, _T("\nInvalid Start Address was changed from %lli to %lli\n"), (long long)CsAppData.i64TransferStartPosition, (long long)i64MinSA);
+CsAppData.i64TransferStartPosition = i64MinSA;
+}
+
+i64MaxLength = CsAcqCfg.i64TriggerDelay + CsAcqCfg.i64Depth - i64MinSA;
+if (CsAppData.i64TransferLength > i64MaxLength)
+{
+_ftprintf(stdout, _T("\nInvalid Transfer Length was changed from %lli to %lli\n"), (long long)CsAppData.i64TransferLength, (long long)i64MaxLength);
+CsAppData.i64TransferLength = i64MaxLength;
+}
+
+InData.i64StartAddress = CsAppData.i64TransferStartPosition;
+/*
+We transfer a little more than we need so we're sure to get what we requested, regardless of any hw alignment issuses
+*/
+InData.i64Length = CsAppData.i64TransferLength + i64Padding;
+InData.pDataBuffer = pBuffer;
+u32ChannelIndexIncrement = CsAs_CalculateChannelIndexIncrement(&CsAcqCfg, &CsSysInfo );
+
+printf(_T("\n\tCsAppData.i64TransferLength : %ld"),CsAppData.i64TransferLength); 
+printf(_T("\n\ti64Padding : %ld"),i64Padding); 
+printf(_T("\n\tInData.i64Length : %ld"),InData.i64Length); 
+printf(_T("\n\tCsSysInfo.u32ChannelCount : %u"),CsSysInfo.u32ChannelCount); 
+printf(_T("\n\tu32ChannelIndexIncrement : %u\n"), u32ChannelIndexIncrement);
+printf("*****************************************************\n");
+
+for (i = 1; i <= CsSysInfo.u32ChannelCount; i += u32ChannelIndexIncrement)
+{
+/*
+Variable that will contain either raw data or data in Volts depending on requested format
+*/
+void* pSrcBuffer = NULL;
+
+ZeroMemory(pBuffer,(size_t)((CsAppData.i64TransferLength + i64Padding) * CsAcqCfg.u32SampleSize));
+InData.u16Channel = (uInt16)i;
+/*
+Transfer the captured data
+*/
+i32Status = CsTransfer(hSystem, &InData, &OutData);
+printf(_T("\n\ti32Status(CsTransfer) : %d\n"),i32Status); 
+
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+if (NULL != pBuffer)
+VirtualFree(pBuffer, 0, MEM_RELEASE);
+if (NULL != pVBuffer)
+VirtualFree(pVBuffer, 0, MEM_RELEASE);
+CsFreeSystem(hSystem);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+return (-1);
+}
+/*
+Note: to optimize the transfer loop, everything from
+this point on in the loop could be moved out and done
+after all the channels are transferred.
+*/
+/*
+Assign a file name for each channel that we want to save
+*/
+_stprintf(szFileName, _T("%s_CH%u_%d.dat"), CsAppData.lpszSaveFileName, i,j+1);
+/*
+Gather up the information needed for the volt conversion and/or file header
+*/
+CsChanCfg.u32Size = sizeof(CSCHANNELCONFIG);
+CsChanCfg.u32ChannelIndex = i;
+printf(_T("\n\tCsChanCfg.u32Size : %u"),CsChanCfg.u32Size); 
+printf(_T("\n\tCsChanCfg.u32ChannelIndex : %u\n"), CsChanCfg.u32ChannelIndex);
+printf("*****************************************************\n");
+
+CsGet(hSystem, CS_CHANNEL, CS_ACQUISITION_CONFIGURATION, &CsChanCfg);
+i64StartOffset = InData.i64StartAddress - OutData.i64ActualStart;
+printf(_T("\n\ti64StartOffset : %ld"),i64StartOffset); 
+printf(_T("\n\tInData.i64StartAddress : %ld"),InData.i64StartAddress); 
+printf(_T("\n\tOutData.i64ActualStart : %ld\n"),OutData.i64ActualStart); 
+printf("*****************************************************\n");
+
+if (i64StartOffset < 0)
+{
+i64StartOffset = 0;
+InData.i64StartAddress = OutData.i64ActualStart;
+}
+
+/*
+Save the smaller of the requested transfer length or the actual transferred length
+*/
+OutData.i64ActualLength -= i64StartOffset;
+i64SavedLength = CsAppData.i64TransferLength <= OutData.i64ActualLength ? CsAppData.i64TransferLength : OutData.i64ActualLength;
+printf(_T("\n\tOutData.i64ActualLength : %ld"),OutData.i64ActualLength); 
+printf(_T("\n\tCsAppData.i64TransferLength : %ld"),CsAppData.i64TransferLength); 
+printf(_T("\n\ti64SavedLength : %ld\n"),i64SavedLength); 
+printf("*****************************************************\n");
+if (TYPE_FLOAT == CsAppData.i32SaveFormat)
+{
+/*
+Call the ConvertToVolts function. This function will convert the raw
+data to voltages. We pass the saved length, which will be converted
+from 0 to actual length. Invalid samples at the beginning are
+skipped over here.
+*/
+i32Status = CsAs_ConvertToVolts(i64SavedLength, CsChanCfg.u32InputRange, CsAcqCfg.u32SampleSize,
+CsAcqCfg.i32SampleOffset, CsAcqCfg.i32SampleRes,
+CsChanCfg.i32DcOffset, (void *)((unsigned char *)pBuffer + (i64StartOffset * CsAcqCfg.u32SampleSize)),
+pVBuffer);
+
+printf(_T("\n\ti32Status(CsAs_ConvertToVolts) : %d\n"),i32Status); 
+if (CS_FAILED(i32Status))
+{
+DisplayErrorString(i32Status);
+continue;
+}
+
+pSrcBuffer = (void *)pVBuffer;
+}
+else
+{
+pSrcBuffer = (void *)((unsigned char *)pBuffer + (i64StartOffset * CsAcqCfg.u32SampleSize));
+}
+/*
+The driver may have had to change the start address and length
+due to alignment issues, so we'll get the actual start and length
+from the driver.
+*/
+stHeader.i64SampleRate = CsAcqCfg.i64SampleRate;
+stHeader.i64Start = InData.i64StartAddress;
+stHeader.i64Length = i64SavedLength;
+stHeader.u32SampleSize = CsAcqCfg.u32SampleSize;
+stHeader.i32SampleRes = CsAcqCfg.i32SampleRes;
+stHeader.i32SampleOffset = CsAcqCfg.i32SampleOffset;
+stHeader.u32InputRange = CsChanCfg.u32InputRange;
+stHeader.i32DcOffset = CsChanCfg.i32DcOffset;
+stHeader.u32SegmentCount = CsAcqCfg.u32SegmentCount;
+stHeader.u32SegmentNumber = InData.u32Segment;
+stHeader.dTimeStamp = NO_TIME_STAMP_VALUE;
+
+// For sig files we treat each multiple record segment of the capture as a separate file
+stHeader.u32SegmentCount = (TYPE_SIG == CsAppData.i32SaveFormat) ? 1 : CsAcqCfg.u32SegmentCount;
+stHeader.u32SegmentNumber = (TYPE_SIG == CsAppData.i32SaveFormat) ? 1 : InData.u32Segment;
+
+i64Status = (int64)CsAs_SaveFile(szFileName, pSrcBuffer, CsAppData.i32SaveFormat, &stHeader);
+printf(_T("\n\ti64Status(CsAs_SaveFile) : %ld\n"),i64Status); 
+
+if ( 0 > i64Status )
+{
+if (CS_MISC_ERROR == i64Status)
+{
+printf(_T("\n"));
+printf(_T("%s\n"), CsAs_GetLastFileError());
+}
+else
+{
+DisplayErrorString(i64Status);
+}
+continue;
+}
+}
+/////////////////////////////CSSYSTEMINFO/////////////////////////////////
+printf(_T("\n\tSize of Board Serial Number : %zu"), sizeof(pArrayBoardInfo->aBoardInfo[i].strSerialNumber));
+printf(_T("\n\tCSSYSTEMINFO.i64MaxMemory : %ld"), CsSysInfo.i64MaxMemory); //4GB 
+printf(_T("\n\tCSSYSTEMINFO.u32size : %u"), CsSysInfo.u32Size); //
+printf(_T("\n\tCSSYSTEMINFO.u32SampleBits : %u"), CsSysInfo.u32SampleBits); //
+printf(_T("\n\tCSSYSTEMINFO.i32SampleResolution : %d"), CsSysInfo.i32SampleResolution); //
+printf(_T("\n\tCSSYSTEMINFO.u32SampleSize : %u"), CsSysInfo.u32SampleSize); //
+printf(_T("\n\tCSSYSTEMINFO.i32SampleOffset : %d"), CsSysInfo.i32SampleOffset); //
+printf(_T("\n\tCSSYSTEMINFO.u32BoardType : %u"), CsSysInfo.u32BoardType); //
+printf(_T("\n\tCSSYSTEMINFO.u32AddonOptions : %u"), CsSysInfo.u32AddonOptions); //
+printf(_T("\n\tCSSYSTEMINFO.u32BoardCount : %u"), CsSysInfo.u32BoardCount); //
+printf(_T("\n\tCSSYSTEMINFO.u32BaseBoardOptions : %u"), CsSysInfo.u32BaseBoardOptions); //
+printf(_T("\n\tCSSYSTEMINFO.u32TriggerMachineCount : %u"), CsSysInfo.u32TriggerMachineCount); //
+printf(_T("\n\tCSSYSTEMINFO.u32ChannelCount : %u\n"), CsSysInfo.u32ChannelCount); //
+///////////////////////////CSAPPLICATIONDATA////////////////////////////////
+printf(_T("\n\tCsAppData.i64TransferStartPosition : %ld"), CsAppData.i64TransferStartPosition); //
+printf(_T("\n\tCsAppData.u32size : %ld"), CsAppData.i64TransferLength); //
+printf(_T("\n\tCsAppData.u32SampleBits : %u"), CsAppData.u32TransferSegmentStart); //
+printf(_T("\n\tCsAppData.i32SampleResolution : %u"), CsAppData.u32TransferSegmentCount); //
+printf(_T("\n\tCsAppData.u32SampleSize : %u"), CsAppData.u32PageSize); //
+printf(_T("\n\tCsAppData.i32SampleOffset : %d\n"), CsAppData.i32SaveFormat); //
+
+///////////////////////////FileHeaderStruct////////////////////////////////
+printf(_T("\n\tFileHeaderStruct.i64Start : %ld"), stHeader.i64Start); //
+printf(_T("\n\tFileHeaderStruct.i64Length : %ld"), stHeader.i64Length); //
+printf(_T("\n\tFileHeaderStruct.i64SampleRate : %ld"), stHeader.i64SampleRate); //
+printf(_T("\n\tFileHeaderStruct.dTimeStamp : %f"), stHeader.dTimeStamp); //
+printf(_T("\n\tFileHeaderStruct.u32SegmentNumber : %u"), stHeader.u32SegmentNumber); //
+printf(_T("\n\tFileHeaderStruct.u32SampleSize : %u"), stHeader.u32SampleSize); //
+printf(_T("\n\tFileHeaderStruct.i32SampleRes : %d"), stHeader.i32SampleRes); //
+printf(_T("\n\tFileHeaderStruct.i32SampleOffset : %d"), stHeader.i32SampleOffset); //
+printf(_T("\n\tFileHeaderStruct.u32InputRange : %u"), stHeader.u32InputRange); //
+printf(_T("\n\tFileHeaderStruct.i32DcOffset : %d"), stHeader.i32DcOffset); //
+printf(_T("\n\tFileHeaderStruct.u32SegmentCount : %u"), stHeader.u32SegmentCount); //
+printf(_T("\n\tFileHeaderStruct.u32AverageCount : %u\n"), stHeader.u32AverageCount); //
+
+/////////////////////////////CSACQUISITIONCONFIG////////////////////////////
+printf(_T("\n\tCSACQUISITIONCONFIG.u32Size : %u"), CsAcqCfg.u32SampleSize); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32ExtClk : %u"), CsAcqCfg.u32ExtClk); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32ExtClkSampleSkip : %u"), CsAcqCfg.u32ExtClkSampleSkip); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32Mode : %u"), CsAcqCfg.u32Mode); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32Size : %u"), CsAcqCfg.u32SampleSize); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32SampleBits : %u"), CsAcqCfg.u32SampleBits); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32SampleSize : %u"), CsAcqCfg.u32SampleSize); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32SegmentCount : %u"), CsAcqCfg.u32SegmentCount); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32TrigEnginesEn : %u"), CsAcqCfg.u32TrigEnginesEn); //
+printf(_T("\n\tCSACQUISITIONCONFIG.u32TimeStampConfig : %u"), CsAcqCfg.u32TimeStampConfig); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64SampleRate : %ld"), CsAcqCfg.i64SampleRate); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64Depth : %ld"), CsAcqCfg.i64Depth); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64SegmentSize : %ld"), CsAcqCfg.i64SegmentSize); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerTimeout : %ld"), CsAcqCfg.i64TriggerTimeout); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerDelay : %ld"), CsAcqCfg.i64TriggerDelay); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i64TriggerHoldoff : %ld"), CsAcqCfg.i64TriggerHoldoff); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i32SampleRes : %d"), CsAcqCfg.i32SampleRes); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i32SampleOffset : %d"), CsAcqCfg.i32SampleOffset); //
+printf(_T("\n\tCSACQUISITIONCONFIG.i32SegmentCountHigh : %d\n"), CsAcqCfg.i32SegmentCountHigh); //
+
+///////////////////////////CSCHANNELCONFIG/////////////////////////////
+printf(_T("\n\tCSCHANNELCONFIG.u32Size : %u"), CsChanCfg.u32Size); //
+printf(_T("\n\tCSCHANNELCONFIG.u32ChannelIndex : %u"), CsChanCfg.u32ChannelIndex); //
+printf(_T("\n\tCSCHANNELCONFIG.u32Term : %u"), CsChanCfg.u32Term); //
+printf(_T("\n\tCSCHANNELCONFIG.u32InputRange : %u"), CsChanCfg.u32InputRange); //
+printf(_T("\n\tCSCHANNELCONFIG.u32Impedance : %u"), CsChanCfg.u32Impedance); //
+printf(_T("\n\tCSCHANNELCONFIG.u32Filter : %u"), CsChanCfg.u32Filter); //
+printf(_T("\n\tCSCHANNELCONFIG.i32DcOffset : %d"), CsChanCfg.i32DcOffset); //
+printf(_T("\n\tCSCHANNELCONFIG.i32Calib : %d\n"), CsChanCfg.i32Calib); //
+
+printf(_T("\n\tu32ChannelIndexIncrement : %u\n"), u32ChannelIndexIncrement); //
+///////////////////////////ARRAY_BOARDINFO///////////////////////////////
+printf(_T("\n\tARRAY_BOARDINFO.aBoardInfo[0] : %u"), pArrayBoardInfo->aBoardInfo[0].u32BoardIndex); //
+printf(_T("\n\tARRAY_BOARDINFO.u32BoardCount : %u\n"), pArrayBoardInfo->u32BoardCount); //
+
+///////////////////////////i32Status////////////////////////////////////
+}
+/*
+<=== End of the repetitive capture loop.
+*/
+/*
+Free any buffers that have been allocated
+*/
+if ( NULL != pVBuffer )
+{
+VirtualFree(pVBuffer, 0, MEM_RELEASE);
+pVBuffer = NULL;
+}
+
+if ( NULL != pBuffer)
+{
+VirtualFree(pBuffer, 0, MEM_RELEASE);
+pBuffer = NULL;
+}
+
+/*
+Free the CompuScope system and any resources it's been using
+*/
+i32Status = CsFreeSystem(hSystem);
+DisplayFinishString(CsAppData.i32SaveFormat);
+VirtualFree (pArrayBoardInfo, 0, MEM_RELEASE);
+end = (((double)clock())/CLOCKS_PER_SEC);
+printf("Execution time : %lf ms\n", (end-start)*1000);
+
+return 0;
+}
+
